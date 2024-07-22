@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rabindra.testassignmentdogapp.data.local.DogEntity
-import com.rabindra.testassignmentdogapp.data.remote.DogResponse
 import com.rabindra.testassignmentdogapp.domain.usecase.DogUseCase
 import com.rabindra.testassignmentdogapp.domain.usecase.GetBreedDogImagesUseCase
 import com.rabindra.testassignmentdogapp.domain.usecase.GetRandomDogUseCase
@@ -36,11 +35,10 @@ class DogViewModel @Inject constructor(
     val dogs: StateFlow<List<DogEntity>> get() = _dogs
 
     init {
-        fetchDogs()
         fetchRandomDogImages()
     }
 
-    private fun fetchRandomDogImages() {
+     fun fetchRandomDogImages() {
         viewModelScope.launch {
             _loading.value = true
             try {
@@ -68,23 +66,4 @@ class DogViewModel @Inject constructor(
         }
     }
 
-    private fun fetchDogs() {
-        viewModelScope.launch {
-            useCase.getAllDogs().collect { dogList ->
-                _dogs.value = dogList
-            }
-        }
-    }
-
-    fun addDog(dogEntity: DogEntity) {
-        viewModelScope.launch {
-            useCase.addDog(dogEntity)
-        }
-    }
-
-    fun removeDog(dogId: String) {
-        viewModelScope.launch {
-            useCase.removeDog(dogId)
-        }
-    }
 }
